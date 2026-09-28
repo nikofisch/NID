@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Network IDS Dashboard</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 2rem; background: #10151d; color: #edf3ff; }
+      h1, h2 { margin-bottom: 0.5rem; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+      .card { background: #1b2430; border: 1px solid #2b3a4b; border-radius: 8px; padding: 1rem; }
+      table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+      th, td { border-bottom: 1px solid #2a3644; padding: 0.6rem; text-align: left; }
+      .pill { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 999px; background: #253a52; }
+      .high { color: #ff8a8a; }
+      .medium { color: #ffd166; }
+      .low { color: #9ae6b4; }
+    </style>
+  </head>
+  <body>
+    <h1>Network IDS Dashboard</h1>
+    <div class="grid">
+      <div class="card">
+        <h2>Total Alerts</h2>
+        <p>{{ stats.total }}</p>
+      </div>
+      <div class="card">
+        <h2>High Severity</h2>
+        <p class="high">{{ stats.high }}</p>
+      </div>
+      <div class="card">
+        <h2>Medium Severity</h2>
+        <p class="medium">{{ stats.medium }}</p>
+      </div>
+      <div class="card">
+        <h2>Low Severity</h2>
+        <p class="low">{{ stats.low }}</p>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top: 2rem;">
+      <div class="card">
+        <h2>Alert Count by Rule</h2>
+        <ul>
+          {% for rule, count in rule_counts.items() %}
+          <li><span class="pill">{{ rule }}</span> {{ count }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Top Source IPs</h2>
+        <ul>
+          {% for ip, count in top_sources %}
+          <li>{{ ip }}: {{ count }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 2rem;">
+      <h2>Recent Alerts</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Severity</th>
+            <th>Rule</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for alert in alerts %}
+          <tr>
+            <td>{{ alert['timestamp'] }}</td>
+            <td class="{{ alert['severity'] | lower }}">{{ alert['severity'] }}</td>
+            <td>{{ alert['rule_name'] }}</td>
+            <td>{{ alert['source_ip'] }}</td>
+            <td>{{ alert['destination_ip'] }}</td>
+            <td>{{ alert['description'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  target:
+    image: python:3.12-slim
+    container_name: ids-target
+    command: >
+      sh -c "python -m http.server 8000"
+    networks:
+      - ids-net
+    expose:
+      - "8000"
+
+  traffic-generator:
+    image: python:3.12-slim
+    container_name: ids-traffic-generator
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh -c "python /app/traffic_generator.py ${MODE:-normal}"
+    depends_on:
+      - target
+    networks:
+      - ids-net
+    environment:
+      MODE: ${MODE:-normal}
+
+networks:
+  ids-net:
+    driver: bridge
+    internal: true
