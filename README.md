@@ -2,10 +2,6 @@
 
 A Python-based Network Intrusion Detection System designed for educational, portfolio, and interview demonstrations in a controlled environment. The project captures packets, normalizes them into a structured event model, applies explainable detection rules, persists alerts in SQLite, and exposes a small Flask dashboard.
 
-## Motivation
-
-The primary goal is to build a clear, understandable intrusion detection workflow that can be explained without machine-learning complexity. The system focuses on observable network behaviors such as port scanning, repeated connection attempts, and traffic spikes. This makes it suitable for coding interviews and portfolio work because each component is small, testable, and easy to reason about.
-
 ## Features
 
 - Packet capture and parsing for TCP, UDP, and ICMP traffic
@@ -192,20 +188,6 @@ Thresholds should be tuned to the specific network profile and environment.
 ## Ethical Use Statement
 
 This repository is intended for learning, defensive monitoring, and controlled lab testing only. It must not be used against third-party systems, production infrastructure, or networks without explicit authorization. All testing is designed to remain in a contained Docker environment.
-
-## Threat Model
-
-This project assumes a trusted local environment and isolated lab hosts. It focuses on monitoring network behavior inside a private test network and aims to detect basic reconnaissance and brute-force-like activity. It does not attempt to secure arbitrary external networks or to provide a production-grade perimeter defense.
-
-## Detection Threshold Rationale
-
-The default thresholds are intentionally conservative and explainable:
-
-- Port scan threshold: a source contacting many unique destination ports in a short interval is a classic reconnaissance pattern.
-- Repeated connection threshold: a burst to the same port suggests automation or brute-force behavior rather than ordinary traffic.
-- Anomaly multiplier: a recent baseline provides context for what counts as a spike, avoiding arbitrary absolute counts.
-
-These values can be adjusted through the configuration module without editing the rule code.
 
 ## Known Environment Notes
 
